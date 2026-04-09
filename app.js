@@ -9,6 +9,13 @@
 // ---------- Constants ----------
 const MAX_IMAGE_SIZE_BYTES = 4 * 1024 * 1024; // 4 MB
 
+// ---------- Gemini generation config ----------
+const GENERATION_CONFIG = {
+  temperature: 0.9,   // Slightly creative but grounded
+  topP: 0.95,
+  maxOutputTokens: 1024,
+};
+
 // ---------- State ----------
 const STATE = {
   apiKey: null,
@@ -74,11 +81,7 @@ async function callGeminiAPI(userMessage, imageData) {
 
   const body = {
     contents,
-    generationConfig: {
-      temperature: 0.9,
-      topP: 0.95,
-      maxOutputTokens: 1024,
-    },
+    generationConfig: GENERATION_CONFIG,
   };
 
   const response = await fetch(url, {
@@ -352,20 +355,19 @@ function formatAIResponse(text) {
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
 
-  // Italic: *text* or _text_ — use negative lookahead/behind to avoid matching
-  // inside already-replaced <strong> tags or doubled markers
-  html = html.replace(/(?<!\*)\*(?!\*)([^*\n]+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-  html = html.replace(/(?<!_)_(?!_)([^_\n]+?)(?<!_)_(?!_)/g, '<em>$1</em>');
+  // Italic: *text* or _text_
+  // All ** and __ are already replaced, so any remaining * or _ are singles.
+  // Use simple patterns without lookbehind for broad browser compatibility.
+  html = html.replace(/\*([^*\n]+?)\*/g, '<em>$1</em>');
+  html = html.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
 
-  // Unordered list items: lines starting with "- " or "• "
-  // Then wrap consecutive <li> runs in <ul>
+  // List items: lines starting with "- ", "• ", or a number followed by ". "
   html = html.replace(/^[-•]\s+(.+)$/gm, '<li>$1</li>');
-
-  // Numbered list items: lines starting with "1. ", "2. ", etc.
   html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
 
-  // Wrap consecutive <li> blocks in a <ul> (handles multiple separate lists)
-  html = html.replace(/(<li>(?:.*\n?)*?<\/li>(?:\n<li>(?:.*\n?)*?<\/li>)*)/g, '<ul>$1</ul>');
+  // Wrap consecutive <li> lines in <ul> using a line-by-line approach
+  // to avoid ReDoS-prone regex on large inputs.
+  html = wrapListItems(html);
 
   // Paragraphs: double newlines
   const blocks = html.split(/\n{2,}/);
@@ -383,6 +385,42 @@ function formatAIResponse(text) {
     .join('');
 
   return html;
+}
+
+/**
+ * Wraps consecutive <li>…</li> lines in a <ul> element.
+ * Iterates line-by-line to avoid ReDoS-vulnerable regex on list content.
+ */
+function wrapListItems(html) {
+  var lines = html.split('\n');
+  var out = [];
+  var inList = false;
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    var trimmed = line.trim();
+    var isListItem = trimmed.startsWith('<li>') && trimmed.endsWith('</li>');
+
+    if (isListItem) {
+      if (!inList) {
+        out.push('<ul>');
+        inList = true;
+      }
+      out.push(trimmed);
+    } else {
+      if (inList) {
+        out.push('</ul>');
+        inList = false;
+      }
+      out.push(line);
+    }
+  }
+
+  if (inList) {
+    out.push('</ul>');
+  }
+
+  return out.join('\n');
 }
 
 // ---------- Navigation ----------
