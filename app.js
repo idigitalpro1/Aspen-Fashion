@@ -26,7 +26,10 @@ const STATE = {
   isSending: false,
 };
 
-// ---------- Gemini API ----------
+// Initial welcome message shown after clearing the chat
+const CLEAR_CHAT_MESSAGE =
+  '<p>Chat cleared! I\'m ready to help you with fresh fashion advice. ✨ What would you like to explore?</p>';
+
 const GEMINI_MODEL = 'gemini-2.0-flash';
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 
@@ -258,13 +261,11 @@ function removeTyping(id) {
 function clearChat() {
   STATE.history = [];
   const container = document.getElementById('chatMessages');
-  container.innerHTML = `
-    <div class="message assistant-message">
-      <div class="message-avatar">✦</div>
-      <div class="message-content">
-        <p>Chat cleared! I'm ready to help you with fresh fashion advice. ✨ What would you like to explore?</p>
-      </div>
-    </div>`;
+  container.innerHTML =
+    '<div class="message assistant-message">' +
+    '<div class="message-avatar">✦</div>' +
+    '<div class="message-content">' + CLEAR_CHAT_MESSAGE + '</div>' +
+    '</div>';
   document.getElementById('quickPrompts').style.display = 'flex';
 }
 
