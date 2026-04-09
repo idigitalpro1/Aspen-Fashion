@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aspen Fashion – AI Style Intelligence</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <span class="logo-icon">✦</span>
+      <span class="logo-text">Aspen<strong>Fashion</strong></span>
+    </div>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#advisor">Style Advisor</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="btn-primary nav-cta" onclick="scrollToAdvisor()">Try Free</button>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Powered by Google Gemini AI</div>
+      <h1 class="hero-title">
+        Your Personal<br />
+        <span class="gradient-text">AI Fashion</span><br />
+        Intelligence
+      </h1>
+      <p class="hero-subtitle">
+        Get instant outfit advice, style recommendations, and fashion insights
+        powered by Google&apos;s Gemini AI — tailored just for you.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary btn-large" onclick="scrollToAdvisor()">
+          Start Styling →
+        </button>
+        <button class="btn-ghost btn-large" onclick="scrollToFeatures()">
+          See Features
+        </button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="fashion-card card-1">
+        <span class="card-emoji">👗</span>
+        <span>Outfit Analysis</span>
+      </div>
+      <div class="fashion-card card-2">
+        <span class="card-emoji">🎨</span>
+        <span>Color Palettes</span>
+      </div>
+      <div class="fashion-card card-3">
+        <span class="card-emoji">✨</span>
+        <span>Style Tips</span>
+      </div>
+      <div class="fashion-card card-4">
+        <span class="card-emoji">🛍️</span>
+        <span>Trend Reports</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <h2>Everything You Need to Look Amazing</h2>
+      <p>AI-powered fashion tools designed to elevate your personal style</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>Style Chat</h3>
+        <p>Ask anything about fashion — trends, outfit ideas, styling tips. Your AI stylist is always available.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📸</div>
+        <h3>Outfit Analysis</h3>
+        <p>Upload a photo of your outfit and get detailed AI feedback, improvement suggestions, and occasion matching.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3>Color Intelligence</h3>
+        <p>Discover your ideal color palette and learn which combinations work best for your skin tone and style.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Occasion Styling</h3>
+        <p>Get outfit recommendations tailored for any occasion — from business meetings to weekend brunches.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <h3>Trend Reports</h3>
+        <p>Stay ahead of fashion with AI-curated trend insights from global runways and street style.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👤</div>
+        <h3>Body Type Guide</h3>
+        <p>Personalized style advice that flatters your unique body type and highlights your best features.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Advisor Section -->
+  <section class="advisor-section" id="advisor">
+    <div class="section-header">
+      <h2>Your AI Style Advisor</h2>
+      <p>Chat with Gemini AI for instant, personalized fashion guidance</p>
+    </div>
+
+    <div class="advisor-container">
+      <!-- API Key Setup -->
+      <div class="api-setup" id="apiSetup">
+        <div class="setup-card">
+          <div class="setup-icon">🔑</div>
+          <h3>Connect to Google Gemini AI</h3>
+          <p>Enter your Google AI Studio API key to unlock AI-powered fashion advice.</p>
+          <div class="setup-steps">
+            <div class="step">
+              <span class="step-num">1</span>
+              <span>Visit <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a></span>
+            </div>
+            <div class="step">
+              <span class="step-num">2</span>
+              <span>Create a free API key</span>
+            </div>
+            <div class="step">
+              <span class="step-num">3</span>
+              <span>Paste it below to start</span>
+            </div>
+          </div>
+          <div class="api-input-group">
+            <input
+              type="password"
+              id="apiKeyInput"
+              class="api-input"
+              placeholder="Paste your Gemini API key here..."
+              autocomplete="off"
+            />
+            <button class="btn-primary" onclick="connectAPI()">Connect</button>
+          </div>
+          <p class="api-note">
+            🔒 Your key stays in your browser and is never sent to our servers.
+          </p>
+        </div>
+      </div>
+
+      <!-- Chat Interface -->
+      <div class="chat-interface hidden" id="chatInterface">
+        <div class="chat-header">
+          <div class="chat-avatar">✦</div>
+          <div class="chat-info">
+            <strong>Aspen AI Stylist</strong>
+            <span class="status-dot"></span>
+            <span>Online</span>
+          </div>
+          <div class="chat-actions">
+            <button class="btn-ghost btn-sm" onclick="clearChat()" title="Clear conversation">🗑️ Clear</button>
+            <button class="btn-ghost btn-sm" onclick="disconnectAPI()" title="Change API key">🔑 Key</button>
+          </div>
+        </div>
+
+        <!-- Quick Prompts -->
+        <div class="quick-prompts" id="quickPrompts">
+          <button class="quick-btn" onclick="sendQuickPrompt('What are the top fashion trends for this season?')">🌟 Season Trends</button>
+          <button class="quick-btn" onclick="sendQuickPrompt('How do I build a capsule wardrobe on a budget?')">👜 Capsule Wardrobe</button>
+          <button class="quick-btn" onclick="sendQuickPrompt('Give me outfit ideas for a business casual look')">💼 Business Casual</button>
+          <button class="quick-btn" onclick="sendQuickPrompt('What colors are trending in fashion right now?')">🎨 Color Trends</button>
+          <button class="quick-btn" onclick="sendQuickPrompt('How to dress for my body type? I need style tips.')">👤 Body Type Tips</button>
+          <button class="quick-btn" onclick="sendQuickPrompt('What are the must-have accessories for any wardrobe?')">💍 Accessories</button>
+        </div>
+
+        <!-- Messages -->
+        <div class="chat-messages" id="chatMessages">
+          <div class="message assistant-message">
+            <div class="message-avatar">✦</div>
+            <div class="message-content">
+              <p>Hello! I&apos;m your personal AI fashion stylist powered by Google Gemini. ✨</p>
+              <p>I can help you with outfit recommendations, style tips, trend reports, color palettes, and so much more. What would you like to explore today?</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image Upload Area -->
+        <div class="image-upload-area" id="imageUploadArea">
+          <span class="upload-preview-text" id="uploadPreviewText">No image selected</span>
+          <button class="btn-ghost btn-sm" onclick="triggerImageUpload()">📸 Add Photo</button>
+          <input type="file" id="imageUpload" accept="image/*" style="display:none" onchange="handleImageUpload(event)" />
+          <button class="btn-ghost btn-sm hidden" id="removeImageBtn" onclick="removeImage()">✕ Remove</button>
+        </div>
+
+        <!-- Input Area -->
+        <div class="chat-input-area">
+          <textarea
+            id="userInput"
+            class="chat-input"
+            placeholder="Ask about outfits, trends, styling tips..."
+            rows="1"
+            onkeydown="handleKeyDown(event)"
+            oninput="autoResize(this)"
+          ></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+            <span>Send</span>
+            <span class="send-icon">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" id="about">
+    <div class="about-content">
+      <div class="about-text">
+        <div class="section-badge">About AspenFashion</div>
+        <h2>Fashion Intelligence, Reimagined</h2>
+        <p>
+          AspenFashion combines the power of Google&apos;s Gemini AI with deep fashion expertise
+          to deliver truly personalized style guidance. Whether you&apos;re building your wardrobe
+          from scratch or refining your existing look, our AI stylist is here to help.
+        </p>
+        <p>
+          Built with Google AI Studio, AspenFashion brings cutting-edge multimodal AI directly
+          to your fashion journey — understanding both text and images to give you the most
+          accurate and helpful style advice possible.
+        </p>
+        <ul class="about-list">
+          <li>✦ Powered by Google Gemini 2.0 Flash</li>
+          <li>✦ Multimodal: text + image understanding</li>
+          <li>✦ Privacy-first: your data stays on your device</li>
+          <li>✦ Free to use with your own API key</li>
+        </ul>
+      </div>
+      <div class="about-visual">
+        <div class="tech-badge">
+          <span class="tech-icon">🤖</span>
+          <div>
+            <strong>Gemini 2.0 Flash</strong>
+            <span>Google AI Studio</span>
+          </div>
+        </div>
+        <div class="tech-badge">
+          <span class="tech-icon">🌐</span>
+          <div>
+            <strong>Web Native</strong>
+            <span>No install required</span>
+          </div>
+        </div>
+        <div class="tech-badge">
+          <span class="tech-icon">🔒</span>
+          <div>
+            <strong>Privacy First</strong>
+            <span>Local API key storage</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="logo-icon">✦</span>
+        <span class="logo-text">Aspen<strong>Fashion</strong></span>
+      </div>
+      <p class="footer-tagline">AI-Powered Fashion Intelligence</p>
+      <p class="footer-note">
+        Built with <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer">Google AI Studio</a> &amp; Gemini API
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
