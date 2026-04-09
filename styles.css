@@ -838,6 +838,10 @@ a:hover {
 }
 
 /* ---------- Scrollbar ---------- */
+.chat-messages {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(192, 132, 252, 0.3) transparent;
+}
 .chat-messages::-webkit-scrollbar { width: 4px; }
 .chat-messages::-webkit-scrollbar-track { background: transparent; }
 .chat-messages::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }

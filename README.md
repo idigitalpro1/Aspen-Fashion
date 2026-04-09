@@ -51,7 +51,7 @@ npx serve .
 3. Click **Create API key**
 4. Copy the key and paste it into the AspenFashion app
 
-> **Privacy**: Your API key is stored only in your browser's session storage and is never transmitted to any server other than Google's Gemini API.
+> **Privacy**: Your API key is held in memory only and is never transmitted to any server other than Google's Gemini API.
 
 ## 🛠️ Tech Stack
 

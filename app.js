@@ -6,6 +6,9 @@
 
 'use strict';
 
+// ---------- Constants ----------
+const MAX_IMAGE_SIZE_BYTES = 4 * 1024 * 1024; // 4 MB
+
 // ---------- State ----------
 const STATE = {
   apiKey: null,
@@ -119,19 +122,12 @@ function connectAPI() {
     return;
   }
 
-  if (!key.startsWith('AI') && key.length < 20) {
+  if (!key.startsWith('AI') || key.length < 20) {
     showInputError(input, 'This doesn\'t look like a valid Gemini API key');
     return;
   }
 
   STATE.apiKey = key;
-
-  // Persist key in sessionStorage (browser-only, not sent to any server)
-  try {
-    sessionStorage.setItem('af_api_key', key);
-  } catch (_) {
-    // sessionStorage unavailable; key is held in memory only
-  }
 
   document.getElementById('apiSetup').classList.add('hidden');
   document.getElementById('chatInterface').classList.remove('hidden');
@@ -140,7 +136,6 @@ function connectAPI() {
 function disconnectAPI() {
   STATE.apiKey = null;
   STATE.history = [];
-  try { sessionStorage.removeItem('af_api_key'); } catch (_) { /* ignore */ }
   document.getElementById('chatInterface').classList.add('hidden');
   document.getElementById('apiSetup').classList.remove('hidden');
   document.getElementById('apiKeyInput').value = '';
@@ -285,8 +280,7 @@ function handleImageUpload(event) {
     return;
   }
 
-  const maxSize = 4 * 1024 * 1024; // 4 MB
-  if (file.size > maxSize) {
+  if (file.size > MAX_IMAGE_SIZE_BYTES) {
     alert('Image must be under 4 MB.');
     return;
   }
@@ -354,20 +348,24 @@ function formatAIResponse(text) {
   // Convert markdown-like formatting to HTML
   let html = escapeHtml(text);
 
-  // Bold: **text** or __text__
+  // Bold: **text** or __text__ (must be replaced before italic)
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
 
-  // Italic: *text* or _text_
-  html = html.replace(/\*([^*]+?)\*/g, '<em>$1</em>');
-  html = html.replace(/_([^_]+?)_/g, '<em>$1</em>');
+  // Italic: *text* or _text_ — use negative lookahead/behind to avoid matching
+  // inside already-replaced <strong> tags or doubled markers
+  html = html.replace(/(?<!\*)\*(?!\*)([^*\n]+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+  html = html.replace(/(?<!_)_(?!_)([^_\n]+?)(?<!_)_(?!_)/g, '<em>$1</em>');
 
-  // Unordered lists: lines starting with "- " or "• "
+  // Unordered list items: lines starting with "- " or "• "
+  // Then wrap consecutive <li> runs in <ul>
   html = html.replace(/^[-•]\s+(.+)$/gm, '<li>$1</li>');
-  html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
 
-  // Numbered lists: lines starting with "1. ", "2. ", etc.
+  // Numbered list items: lines starting with "1. ", "2. ", etc.
   html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
+
+  // Wrap consecutive <li> blocks in a <ul> (handles multiple separate lists)
+  html = html.replace(/(<li>(?:.*\n?)*?<\/li>(?:\n<li>(?:.*\n?)*?<\/li>)*)/g, '<ul>$1</ul>');
 
   // Paragraphs: double newlines
   const blocks = html.split(/\n{2,}/);
@@ -379,7 +377,7 @@ function formatAIResponse(text) {
         return block;
       }
       // Single newlines within a block → <br>
-      return `<p>${block.replace(/\n/g, '<br />')}</p>`;
+      return '<p>' + block.replace(/\n/g, '<br />') + '</p>';
     })
     .filter(Boolean)
     .join('');
@@ -396,17 +394,4 @@ function scrollToFeatures() {
   document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
 }
 
-// ---------- Init ----------
-(function init() {
-  // Restore API key from session (same browser session only)
-  try {
-    const saved = sessionStorage.getItem('af_api_key');
-    if (saved) {
-      STATE.apiKey = saved;
-      document.getElementById('apiSetup').classList.add('hidden');
-      document.getElementById('chatInterface').classList.remove('hidden');
-    }
-  } catch (_) {
-    // sessionStorage unavailable
-  }
-})();
+// App is ready; no persistent session state to restore.
