@@ -33,12 +33,12 @@ const PERSONAS: AgentPersona[] = [
   },
   { 
     id: 'rachael', 
-    name: 'Rachael Ballentine', 
-    role: 'Cultural Observer | Granola Authority', 
-    style: 'Hyper-conscious granola. Precision pragmatism.', 
+    name: 'Rachael Marie Ballentine', 
+    role: 'In Memoriam | Cultural Observer', 
+    style: 'Colorado polish. Road-tested glamour. Mountain pragmatism.', 
     avatarIcon: 'fa-mountain-sun', 
     voiceName: 'Zephyr',
-    bio: 'Raised at altitude and sharpened by five years on the road, Rachael audits fashion for truth. She dissects the Aspen illusion: sustainability without precision is simply laziness.'
+    bio: 'Rachael is remembered as a Colorado original: stylish, quick, funny, restless, and impossible to mistake for anyone else. Her archive keeps the look, the wit, and the road-light alive.'
   }
 ];
 
@@ -61,6 +61,71 @@ const CATEGORIES = [
 
 type AppCategory = ContentCategory;
 
+const RACHAEL_ARCHIVE_IMAGES = [
+  { src: '/rachael-ballentine/hero.jpg', label: 'Portrait' },
+  { src: '/rachael-ballentine/portrait.jpg', label: 'Studio poise' },
+  { src: '/rachael-ballentine/taiwan.jpg', label: 'Traveler' },
+  { src: '/rachael-ballentine/colorado-rail.jpg', label: 'Colorado light' },
+  { src: '/rachael-ballentine/mountain-jeep.jpg', label: 'High country' },
+  { src: '/rachael-ballentine/music-room.jpg', label: 'Music room' },
+  { src: '/rachael-ballentine/friends-close.jpg', label: 'Friends' },
+  { src: '/rachael-ballentine/rooftop-friends.jpg', label: 'Rooftop' },
+  { src: '/rachael-ballentine/early-friends.jpg', label: 'Archive' },
+];
+
+const RachaelArchivePage: React.FC = () => (
+  <main className="min-h-screen bg-zinc-950 text-white overflow-x-hidden">
+    <section className="relative min-h-screen flex items-end">
+      <img src="/rachael-ballentine/hero.jpg" alt="Rachael Marie Ballentine" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-zinc-950" />
+      <div className="relative z-10 w-full px-6 py-16 md:px-20">
+        <div className="max-w-5xl">
+          <p className="mb-5 text-[11px] font-black uppercase tracking-[0.55em] text-aspen-gold">Aspen Fashion Archive</p>
+          <h1 className="font-serif text-5xl font-bold uppercase leading-none tracking-tighter md:text-8xl">Rachael Marie Ballentine</h1>
+          <p className="mt-6 max-w-3xl font-serif text-2xl italic leading-relaxed text-zinc-200 md:text-3xl">A Colorado original with style, wit, and a traveler's heart.</p>
+        </div>
+      </div>
+    </section>
+
+    <section className="px-6 py-20 md:px-20">
+      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="space-y-6">
+          <div className="overflow-hidden rounded-[3rem] border border-white/10 bg-white/5 p-4">
+            <img src="/rachael-ballentine/mountain-jeep.jpg" alt="Rachael in the Colorado high country" className="aspect-[4/5] w-full rounded-[2.5rem] object-cover" />
+          </div>
+          <p className="px-4 text-[11px] font-black uppercase tracking-[0.4em] text-zinc-500">In Loving Memory</p>
+        </div>
+        <article className="space-y-8 self-center text-xl leading-relaxed text-zinc-300">
+          <p>There are people who enter a room quietly, and people who change the room before anyone has finished turning around. Rachael Marie Ballentine belonged to the second group.</p>
+          <p>She carried beauty without softness, humor without apology, and style that was never costume. In photographs she is glamorous, mischievous, polished, and free: crossing cities overseas, standing in Colorado light, laughing with friends, and making ordinary moments feel camera-ready.</p>
+          <p>Friends knew her as restless, loyal, sharp-eyed, and alive to music, clothes, travel, and the theater of a night out. She could move from society rooms to jeep roads, from Denver rooftops to Hong Kong lights, from Colorado water and stone to the bright color of a birthday table.</p>
+          <p className="text-zinc-500">Family service details and additional remembrances may be added as they are confirmed.</p>
+        </article>
+      </div>
+    </section>
+
+    <section className="px-6 pb-24 md:px-20">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 flex items-end justify-between gap-8">
+          <div>
+            <p className="mb-3 text-[10px] font-black uppercase tracking-[0.5em] text-aspen-gold">Visual Memory</p>
+            <h2 className="font-serif text-4xl font-bold uppercase tracking-tight md:text-6xl">The Archive</h2>
+          </div>
+          <div className="hidden h-px flex-1 bg-white/10 md:block" />
+        </div>
+        <div className="grid gap-5 md:grid-cols-3">
+          {RACHAEL_ARCHIVE_IMAGES.map((image) => (
+            <figure key={image.src} className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/5">
+              <img src={image.src} alt={image.label} className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105" />
+              <figcaption className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.35em] text-zinc-500">{image.label}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+);
+
 const BrandLogo: React.FC<{ brandHint?: string }> = ({ brandHint }) => {
   if (!brandHint) return <div className="w-8 h-8 rounded-full bg-zinc-50 flex items-center justify-center text-zinc-300 border border-zinc-100 shadow-sm shrink-0"><i className="fas fa-fingerprint text-[10px]"></i></div>;
   const brand = brandHint.toLowerCase();
@@ -71,7 +136,7 @@ const BrandLogo: React.FC<{ brandHint?: string }> = ({ brandHint }) => {
   return <div className={`w-8 h-8 rounded-full ${bgColor} flex items-center justify-center text-[10px] font-bold border shadow-md shrink-0 transition-transform hover:scale-110`}>{display}</div>;
 };
 
-const App: React.FC = () => {
+const StudioApp: React.FC = () => {
   const savedPlan = localStorage.getItem('aspen_membership_plan');
   const sessionUser = localStorage.getItem('aspen_session_active');
 
@@ -191,7 +256,7 @@ const App: React.FC = () => {
       const introText = `Welcome. I am Patrick Henry Sweeney, founder of Aspen Fashion Intelligence. I believe style is intelligence expressed physically. Your clothing should speak before you do — and linger after you leave.`;
       handleSpeak(introText, 'Fenrir'); 
     } else if (currentPersona.id === 'rachael') {
-      const introText = `I am Rachael Ballentine. Raised in Aspen, sharpened by the road. I don't follow fashion — I audit it. Luxury without conscience is merely a costume.`;
+      const introText = `This is the Rachael Marie Ballentine archive: Colorado polish, road-tested glamour, mountain pragmatism, and a life remembered in photographs.`;
       handleSpeak(introText, 'Zephyr');
     } else {
       handleSpeak(`Hello. I am ${currentPersona.name}, your ${currentPersona.role}. ${currentPersona.bio}`);
@@ -718,6 +783,14 @@ const App: React.FC = () => {
       <canvas ref={canvasRef} className="hidden" />
     </div>
   );
+};
+
+const App: React.FC = () => {
+  const isRachaelArchivePath =
+    typeof window !== 'undefined' &&
+    (window.location.pathname.includes('rachael-ballentine') || window.location.hash.includes('rachael-ballentine'));
+
+  return isRachaelArchivePath ? <RachaelArchivePage /> : <StudioApp />;
 };
 
 export default App;
