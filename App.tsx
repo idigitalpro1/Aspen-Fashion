@@ -697,7 +697,7 @@ const StudioApp: React.FC = () => {
             <span>Aspen Fashion Intel v1.6 — Heritage Mode</span>
             {state.membershipPlan && <div className="flex items-center space-x-3 text-aspen-gold ml-6"><span className="px-4 py-1.5 bg-aspen-gold/10 rounded-full border border-aspen-gold/20 tracking-[0.3em] font-black">{state.membershipPlan} Elite</span></div>}
          </div>
-         <div className="text-zinc-500 text-[9px] font-black uppercase tracking-widest">© 2025 Patrick Henry Sweeney — Intelligence Studio</div>
+         <div className="text-zinc-500 text-[9px] font-black uppercase tracking-widest">© 2026 Patrick Henry Sweeney — Intelligence Studio</div>
       </footer>
 
       {/* Philosophy Modal */}
